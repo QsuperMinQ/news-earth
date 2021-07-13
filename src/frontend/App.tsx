@@ -7,6 +7,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import GlobeGLView from './globegl/GlobeGLView';
 
 type Props = {}
 
@@ -18,8 +19,11 @@ const App: React.FC<Props> = () => {
           <Route path="/globe">
             <GlobeView />
           </Route>
-          <Route path="/mapView">
+          <Route path="/map">
             <MapView />
+          </Route>
+          <Route path="/globegl">
+            <GlobeGLView />
           </Route>
           <Route path="/">
             <GlobeView />
