@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "4.0.3",
-    "typescript": "^3.7.2",
-    "web-vitals": "^1.0.1",
-    "@craco/craco": "^5.7.0",
-    "cesium": "^1.73.0",
+    "@craco/craco": "^6.2.0",
+    "cesium": "^1.83.0",
     "craco-cesium": "^1.2.0",
     "craco-plugin-react-hot-reload": "^0.1.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "react-hot-loader": "^4.13.0",
-    "resium": "1.13.1"
+    "react-scripts": "4.0.3",
+    "resium": "^1.13.1",
+    "typescript": "^3.7.2",
+    "web-vitals": "^1.0.1"
   },
   "devDependencies": {
     "@types/react": "^16.12.0",
@@ -21,9 +21,9 @@
     "customize-cra": "^1.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
