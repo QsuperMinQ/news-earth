@@ -124,15 +124,15 @@ function MapView() {
         'data': point
       });
 
-      // map.addLayer({
-      //   'id': 'route',
-      //   'source': 'route',
-      //   'type': 'line',
-      //   'paint': {
-      //   'line-width': 2,
-      //   'line-color': '#007cbf'
-      //   }
-      // });
+      map.addLayer({
+        'id': 'route',
+        'source': 'route',
+        'type': 'line',
+        'paint': {
+        'line-width': 2,
+        'line-color': '#007cbf'
+        }
+      });
       
       map.addLayer({
         'id': 'point',
