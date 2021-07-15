@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.2.0",
+    "@turf/turf": "^6.5.0",
     "cesium": "^1.83.0",
     "craco-cesium": "^1.2.0",
     "craco-plugin-react-hot-reload": "^0.1.0",
@@ -15,6 +16,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "resium": "^1.13.1",
+    "turf": "^3.0.14",
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
