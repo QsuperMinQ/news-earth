@@ -9,35 +9,30 @@ import {
 import globeData from './globeData.json'
 
 globeData.features.forEach(item => {
-    item.properties.politic_polar = 0.5;
+    item.properties.sentiment = 0.5;
 })
 
 function GlobeGLView(props) {
 
     // const [countries, setCountries] = useState({ features: []});
     const [countries, setCountries] = useState(globeData);
-    const [hoverD, setHoverD] = useState();
-    const [bool, setBool] = useState(window.location.search.split('?')[1]);
-    const [showList, setShowList] = useState(false);
-    const [newsList, setNewsList] = useState([]);
     const [current, setCurrent] = useState('emotion');
+    const [time, setTime] = useState(1);
 
     useEffect(() => {
         timeChange(1)
     },[]);
 
     const timeChange = (v) => {
-        console.log('vvv', v)
-        console.log('new Date(dateString)', new Date(`2021-07-${v}`).getTime()/1000)
+        setTime(v)
         let time = (new Date(`2021-07-${v}`).getTime())/1000;
         // console.log('time', time)
-        fetch(`http://35.72.9.13/api/state/politic_polar?ts=${time}`).then(res => res.json()).then(res => {
+        fetch(`http://35.72.9.13/api/state/sentiment?ts=${time}`).then(res => res.json()).then(res => {
             let data = {type: countries.type, features: [...countries.features], bbox: countries.bbox}
             res.forEach(item => {
                 data.features.forEach(i => {
                     if (i.properties.name === item.state) {
-                        i.properties.politic_polar = item.politic_polar;
-                        i.properties.items = item.items;
+                        i.properties.sentiment = item.sentiment;
                     }
                 })
             })
@@ -50,31 +45,46 @@ function GlobeGLView(props) {
         return <div>{`7-${v}`}</div>
     }
 
-    const onClose = () => {
-    setShowList(false);
-    };
-
     const handleClick = e => {
         console.log('click ', e);
         setCurrent(e.key)
         
     };
 
+    const getGrade = (v) => {
+      console.log('Sentiment==>', v)
+     if (0 < v && v <= 1/6) {
+        return 'blue'
+      } else if (1/6 < v && v <= 2/6) {
+        return 'red'
+      } else if (2/6 < v && v <= 3/6) {
+        return 'yellow'
+      } else if (3/6 < v && v <= 4/6) {
+        return 'pink'
+      } else if (4/6 < v && v <= 5/6) {
+        return '#F9AA0C'
+      } else if (5/6 < v && v <= 1) {
+        return 'green'
+      }
+    }
+
     return (
         <div>
             <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
                 <Menu.Item key="politic">
                     
-                    <Link to="/globegl">Politically Partisan</Link>
+                    <Link to="/globegl">Political polar</Link>
                 </Menu.Item>
                 <Menu.Item key="emotion">
                     
-                    <Link to="/globeglEmotion">Emotion</Link>
+                    <Link to="/globeglEmotion">Sentiment</Link>
                 </Menu.Item>
                 <Menu.Item key="Topic">
-                    <Link to="/map">Topic</Link>
+                    <Link to="/map">Event timeline</Link>
                 </Menu.Item>
             </Menu>
+
+            <div style = {Styles.time}>{`7-${time}`}</div>
 
             <div style = {{position: 'absolute', zIndex: '100', width: '50%',height: '100px',left: '5%'}}>
                 <Slider
@@ -84,20 +94,14 @@ function GlobeGLView(props) {
                     tipFormatter ={tipFormatter}/>
             </div>
 
-            <Drawer
-                title="news"
-                placement="right"
-                closable={false}
-                onClose={onClose}
-                visible={showList}
-            >
-                {
-                    newsList.map(item => {
-                        return <p><a href={item.url}>{item.title}</a></p>
-                    })
-                }
-                
-            </Drawer>
+            <div style = {Styles.legend}>
+              <p style ={Styles.blue}>Sad</p>
+              <p style ={Styles.red}>Angry</p>
+              <p style ={Styles.yellow}>Scared</p>
+              <p style ={Styles.pink}>Tender</p>
+              <p style ={Styles.orange}>Excited</p>
+              <p style ={Styles.green}>Happy</p>
+            </div>
 
             <Globe
                     globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
@@ -107,18 +111,20 @@ function GlobeGLView(props) {
                     polygonsData={countries.features}
                     polygonStrokeColor={() => '#111'}
                     polygonSideColor={() => 'aacbff'}
-                    polygonCapColor={() => 'aacbff'}
+                    polygonCapColor={({ properties: d }) => {
+                      return getGrade(d.sentiment)
+                    }}
 
                     labelsData={countries.features}
                     labelLat={d => d.properties.lat}
                     labelLng={d => d.properties.lng}
-                    labelText={d => d.properties.name}
-                    labelSize={0.5}
-                    labelDotRadius={0.5}
+                    // labelText={d => d.properties.name}
+                    // labelSize={0.5}
+                    // labelDotRadius={0.5}
                     labelAltitude = {0.03}
-                    labelLabel = {({ properties: d }) => `
-                        <b>detail:${d.name}</b> <br />
-                    `}
+                    // labelLabel = {({ properties: d }) => `
+                    //     <b style='color: red'>Sentiment:${getSentiment((d.politic_polar+1)/2)}</b> <br />
+                    // `}
                     onLabelClick = {() => {
                         console.log('9999999')
                     }}
@@ -129,6 +135,95 @@ function GlobeGLView(props) {
 
         </div>
     )
+}
+
+const Styles = {
+
+  time: {
+    position: 'absolute',
+    zIndex: '100',
+    width: '100px',
+    height: '100px',
+    left: '10px',
+    top:'150px',
+    backgroundColor:'#fff',
+    fontSize: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  legend: {
+    position: 'absolute',
+    zIndex: '100',
+    width: '100px',
+    right: '10px',
+    top:'50px',
+    backgroundColor:'#fff',
+    fontSize: '16px',
+    color: '#ECEBE8'
+  },
+
+  blue: {
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'blue',
+    margin: 0
+  },
+
+  red: {
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    backgroundColor: 'red'
+  },
+
+  yellow: {
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    backgroundColor: 'yellow'
+  },
+
+  pink: {
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    backgroundColor: 'pink'
+  },
+
+  orange: {
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    backgroundColor: '#F9AA0C'
+  },
+
+  green: {
+    width: '100%',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0,
+    backgroundColor: 'green'
+  },
+
 }
 
 export default GlobeGLView;

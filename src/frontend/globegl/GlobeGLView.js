@@ -21,14 +21,14 @@ function GlobeGLView(props) {
     const [showList, setShowList] = useState(false);
     const [newsList, setNewsList] = useState([]);
     const [current, setCurrent] = useState('politic');
+    const [time, setTime] = useState(1);
 
     useEffect(() => {
         timeChange(1)
     },[]);
 
     const timeChange = (v) => {
-        console.log('vvv', v)
-        console.log('new Date(dateString)', new Date(`2021-07-${v}`).getTime()/1000)
+        setTime(v)
         let time = (new Date(`2021-07-${v}`).getTime())/1000;
         // console.log('time', time)
         fetch(`http://35.72.9.13/api/state/politic_polar?ts=${time}`).then(res => res.json()).then(res => {
@@ -66,18 +66,20 @@ function GlobeGLView(props) {
             <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
                 <Menu.Item key="politic">
                     
-                    <Link to="/globegl">Politically Partisan</Link>
+                    <Link to="/globegl">Political polar</Link>
                 </Menu.Item>
                 <Menu.Item key="emotion">
                     
-                    <Link to="/globeglEmotion">Emotion</Link>
+                    <Link to="/globeglEmotion">Sentiment</Link>
                 </Menu.Item>
                 <Menu.Item key="Topic">
-                    <Link to="/map">Topic</Link>
+                    <Link to="/map">Event timeline</Link>
                 </Menu.Item>
             </Menu>
 
-            <div style = {{position: 'absolute', zIndex: '100', width: '50%',height: '100px',left: '5%'}}>
+            <div style = {Styles.time}>{`7-${time}`}</div>
+
+            <div style = {{position: 'absolute', zIndex: '100', width: '50%',height: '100px',left: '5%',top:'60px',}}>
                 <Slider
                     min={1}
                     max={14}
@@ -94,7 +96,7 @@ function GlobeGLView(props) {
             >
                 {
                     newsList.map(item => {
-                        return <p><a href={item.url}>{item.title}</a></p>
+                        return <p><img style={Styles.icon} src={item.thumbnail_url[0]}/><span>[{item.politic_polar}]&nbsp;</span><a href={item.url}>{item.title}</a></p>
                     })
                 }
                 
@@ -110,7 +112,7 @@ function GlobeGLView(props) {
                     polygonsData={countries.features}
                     polygonAltitude={d => d === hoverD ? 0.12 : 0.06}
                     // polygonCapColor={d => d === hoverD ? 'green' : colorScale(getVal(d))}
-                    polygonCapColor={d => d === hoverD ? 'green' : d3.interpolateRdBu(1-d.properties.politic_polar)}
+                    polygonCapColor={d => d === hoverD ? 'green' : d3.interpolateRdBu(1-((d.properties.politic_polar + 1)/2))}
                     polygonSideColor={() => 'rgba(0, 100, 0, 0.15)'}
                     polygonStrokeColor={() => '#111'}
                     polygonLabel={({ properties: d }) => `
@@ -154,6 +156,27 @@ function GlobeGLView(props) {
 
         </div>
     )
+}
+
+var Styles = {
+    time: {
+        position: 'absolute',
+        zIndex: '100',
+        width: '100px',
+        height: '100px',
+        left: '10px',
+        top:'150px',
+        backgroundColor:'#fff',
+        fontSize: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
+    icon: {
+        width: '30px',
+        height: '30px'
+    }
 }
 
 export default GlobeGLView;
