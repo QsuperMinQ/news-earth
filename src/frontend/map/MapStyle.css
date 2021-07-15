@@ -1,5 +1,5 @@
 .mapStyle {
-    width: 1700px;
+    width: 2200px;
     height: 1200px;
 }
 
@@ -23,4 +23,13 @@
         
 .overlay button:hover {
     background-color: #4ea0da;
+}
+
+.contentShow {
+    position: absolute;
+    left: 50px;
+    top: 50px;
+    width: 400px;
+    height: 400px;
+    z-index: 1;
 }
