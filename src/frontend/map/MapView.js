@@ -190,7 +190,7 @@ function MapView() {
   }, []);
   return <div>
       <div className="contentShow">
-        <div>
+        <div className='cardBg'>
           <span> Global Insights: WHO's Response to Covid-19 </span> <br/> <br/>
           <span>{contentState.key} </span> <br/><br/>
           <span>{contentState.value.content[0]} </span>

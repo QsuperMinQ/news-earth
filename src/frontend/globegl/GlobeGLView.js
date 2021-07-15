@@ -21,10 +21,10 @@ function GlobeGLView(props) {
     const [showList, setShowList] = useState(false);
     const [newsList, setNewsList] = useState([]);
     const [current, setCurrent] = useState('politic');
-    const [time, setTime] = useState(1);
+    const [time, setTime] = useState(2);
 
     useEffect(() => {
-        timeChange(1)
+        timeChange(time)
     },[]);
 
     const timeChange = (v) => {
@@ -83,6 +83,7 @@ function GlobeGLView(props) {
                 <Slider
                     min={1}
                     max={14}
+                    defaultValue={time}
                     onChange={timeChange}
                     tipFormatter ={tipFormatter}/>
             </div>

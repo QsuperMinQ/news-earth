@@ -33,3 +33,9 @@
     height: 400px;
     z-index: 1;
 }
+
+.cardBg {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 11px;
+}
