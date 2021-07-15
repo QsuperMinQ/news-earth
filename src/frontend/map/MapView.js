@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import mapboxgl from 'mapbox-gl';
 import turf from 'turf';
 import './MapStyle.css';
@@ -9,8 +9,8 @@ function setupPopup(map, entry) {
   const value = entry[1];
   var html = `
     <div>
-      <span>${key} <span> <br><br>
-      <span>${value.content[0]} <span>
+      <span>${key} </span> </br></br>
+      <span>${value.content[0]} </span>
     </div>
   `;
   var popUp = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
@@ -21,13 +21,22 @@ function setupPopup(map, entry) {
 }
 
 function MapView() {
+  const [contentState, setContentState] = useState({
+    key: "",
+    value: {
+      content: [""]
+    }
+  });
+
   useEffect(() => {
+    document.title = "Global Insights: WHO's Response to Covid-19"
+
     // Get valid entities
     var data_entries = []
     Object.entries(data).forEach(entry => {
         const key = entry[0];
         const value = entry[1];
-        if (value["lat_lng"]) {
+        if (value["lat_lng"] && data_entries.length <= 20) {
           data_entries.push(entry);
         }
     });
@@ -42,7 +51,7 @@ function MapView() {
       container: "mapView",
       style: 'mapbox://styles/mapbox/streets-v11',
       center: origin,
-      zoom: 2
+      zoom: 3
     });
 
     // Setup popup and markers
@@ -101,7 +110,7 @@ function MapView() {
     route.features[0].geometry.coordinates = arc;
     
     // Used to increment the value of the point measurement against the route.
-    var counter = 0;
+    var counter = 0, nextIndex = 0;
     
     map.on('load', function () {
       // Add a source and layer displaying a point which will be animated in a circle.
@@ -115,15 +124,15 @@ function MapView() {
         'data': point
       });
 
-      map.addLayer({
-        'id': 'route',
-        'source': 'route',
-        'type': 'line',
-        'paint': {
-        'line-width': 2,
-        'line-color': '#007cbf'
-        }
-      });
+      // map.addLayer({
+      //   'id': 'route',
+      //   'source': 'route',
+      //   'type': 'line',
+      //   'paint': {
+      //   'line-width': 2,
+      //   'line-color': '#007cbf'
+      //   }
+      // });
       
       map.addLayer({
         'id': 'point',
@@ -163,6 +172,14 @@ function MapView() {
               requestAnimationFrame(animate);
           }
         
+          if (counter % 100 == 0 && nextIndex < data_entries.length) {
+            setContentState({
+              key: data_entries[nextIndex][0],
+              value: data_entries[nextIndex][1]
+            });
+            nextIndex += 1;
+          }
+
           counter = counter + 1;
 
           map.setCenter(end);
@@ -171,7 +188,16 @@ function MapView() {
       animate(counter);
     });
   }, []);
-  return <div id ="mapView" className="mapStyle" ></div>
+  return <div>
+      <div className="contentShow">
+        <div>
+          <span> Global Insights: WHO's Response to Covid-19 </span> <br/> <br/>
+          <span>{contentState.key} </span> <br/><br/>
+          <span>{contentState.value.content[0]} </span>
+        </div>
+      </div>
+      <div id ="mapView" className="mapStyle" ></div>
+    </div>;
 }
 
 export default MapView;
