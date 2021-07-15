@@ -9,7 +9,7 @@ import {
 import globeData from './globeData.json'
 
 globeData.features.forEach(item => {
-    item.properties.politic_polar = 0.5;
+    item.properties.politic_polar = 0;
 })
 
 function GlobeGLView(props) {
