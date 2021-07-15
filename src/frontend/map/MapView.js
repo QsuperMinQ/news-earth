@@ -2,77 +2,54 @@ import React, { useEffect } from "react";
 import mapboxgl from 'mapbox-gl';
 import turf from 'turf';
 import './MapStyle.css';
+import data from './covid19-who-response.json'
 
+function setupPopup(map, entry) {
+  const key = entry[0];
+  const value = entry[1];
+  var html = `
+    <div>
+      <span>${key} <span> <br><br>
+      <span>${value.content[0]} <span>
+    </div>
+  `;
+  var popUp = new mapboxgl.Popup({ offset: 25 }).setHTML(html);
+  var marker = new mapboxgl.Marker()
+    .setLngLat([value.lat_lng[1] + Math.random() * 0.03, value.lat_lng[0] + Math.random() * 0.03])
+    .setPopup(popUp)
+    .addTo(map);
+}
 
 function MapView() {
   useEffect(() => {
+    // Get valid entities
+    var data_entries = []
+    Object.entries(data).forEach(entry => {
+        const key = entry[0];
+        const value = entry[1];
+        if (value["lat_lng"]) {
+          data_entries.push(entry);
+        }
+    });
+
+    const lng_lats = data_entries.map(entry => [entry[1].lat_lng[1] , entry[1].lat_lng[0]])
+    var origin = [data_entries[0][1].lat_lng[1], data_entries[0][1].lat_lng[0]];
+    var destination = [data_entries[data_entries.length - 1][1].lat_lng[1], 
+                       data_entries[data_entries.length - 1][1].lat_lng[0]];
+
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2VpbGl1OTMiLCJhIjoiY2tyMXRyeXRpMjVpdDJvcWh4ZGI0MTJ1NyJ9.US2-VirgCQkgLL3onAfqJw';
     const map = new mapboxgl.Map({
       container: "mapView",
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-96, 37.8],
-      zoom: 3
+      center: origin,
+      zoom: 2
     });
 
-    // source marker
-    var sourceHtml = `
-      <div>
-        <ol>
-          <li> News one </li>
-          <li> News two </li>
-          <li> News three </li>
-          <li> News four </li>
-        </ol>
-      </div>
-    `;
-    var sourcePopup = new mapboxgl.Popup({ offset: 25 }).setHTML(sourceHtml);
-    var sourceMarker = new mapboxgl.Marker()
-      .setLngLat([-122.414, 37.776])
-      .setPopup(sourcePopup)
-      .addTo(map);
+    // Setup popup and markers
+    data_entries.forEach(entry => {
+      setupPopup(map, entry)
+    });
 
-    // target marker
-    var middleHtml = `
-      <div>
-        <ol>
-          <li> News one </li>
-          <li> News two </li>
-          <li> News three </li>
-          <li> News four </li>
-        </ol>
-      </div>
-    `;
-    var middlePopup = new mapboxgl.Popup({ offset: 25 }).setHTML(middleHtml);
-    var middleMarker = new mapboxgl.Marker()
-      .setLngLat([-100.34, 35.78])
-      .setPopup(middlePopup)
-      .addTo(map);
-
-    // target marker
-    var targetHtml = `
-      <div>
-        <ol>
-          <li> News one </li>
-          <li> News two </li>
-          <li> News three </li>
-          <li> News four </li>
-        </ol>
-      </div>
-    `;
-    var targetPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(targetHtml);
-    var targetMarker = new mapboxgl.Marker()
-      .setLngLat([-77.032, 38.913])
-      .setPopup(targetPopup)
-      .addTo(map);
-
-    // San Francisco
-    var origin = [-122.414, 37.776];
-
-    var middle = [-100.34, 35.78]
-    
-    // Washington DC
-    var destination = [-77.032, 38.913];
-    
     // A simple line from origin to destination.
     var route = {
       'type': 'FeatureCollection',
@@ -81,7 +58,7 @@ function MapView() {
           'type': 'Feature',
           'geometry': {
           'type': 'LineString',
-          'coordinates': [origin, middle, destination]
+          'coordinates': lng_lats
           }
         }
       ]
@@ -105,14 +82,14 @@ function MapView() {
     
     // Calculate the distance in kilometers between route start/end point.
     // var lineDistance = turf.length(route.features[0]);
-    var lineDistance = 23251
+    var lineDistance = 100000000
 
     var arc = [];
     
     // Number of steps to use in the arc and animation, more steps means
     // a smoother arc and animation, but too many steps will result in a
     // low frame rate
-    var steps = 500;
+    var steps = 10000000;
     
     // Draw an arc between the `origin` & `destination` of the two points
     for (var i = 0; i < lineDistance; i += lineDistance / steps) {
@@ -176,8 +153,7 @@ function MapView() {
           // at the end of the arc, which uses the previous point and the current point
           point.features[0].properties.bearing = turf.bearing(
           turf.point(start),
-          turf.point(end))
-          ;
+          turf.point(end));
         
           // Update the source with this new data
           map.getSource('point').setData(point);
@@ -188,8 +164,10 @@ function MapView() {
           }
         
           counter = counter + 1;
+
+          map.setCenter(end);
       }
-      // Start the animation
+
       animate(counter);
     });
   }, []);
