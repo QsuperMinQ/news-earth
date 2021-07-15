@@ -1,7 +1,7 @@
 import React from "react";
 import Globe from "react-globe.gl";
 
-const GlobeGLView = () => {
+function GlobeGLView() {
     return <Globe pointsData={[]} />
 }
 

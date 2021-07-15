@@ -9,9 +9,7 @@ import {
 } from "react-router-dom";
 import GlobeGLView from './globegl/GlobeGLView';
 
-type Props = {}
-
-const App: React.FC<Props> = () => {
+function App() {
   return (
     <div className="App">
       <Router>
