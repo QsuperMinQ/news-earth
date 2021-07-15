@@ -17,10 +17,10 @@ function GlobeGLView(props) {
     // const [countries, setCountries] = useState({ features: []});
     const [countries, setCountries] = useState(globeData);
     const [hoverD, setHoverD] = useState();
-    const [bool, setBool] = useState(true);
+    const [bool, setBool] = useState(window.location.search.split('?')[1]);
     const [showList, setShowList] = useState(false);
     const [newsList, setNewsList] = useState([]);
-    const [current, setCurrent] = useState('politic');
+    const [current, setCurrent] = useState('emotion');
 
     useEffect(() => {
         timeChange(1)
@@ -57,7 +57,6 @@ function GlobeGLView(props) {
     const handleClick = e => {
         console.log('click ', e);
         setCurrent(e.key)
-        setBool(e.key === 'politic')
         
     };
 
@@ -100,31 +99,7 @@ function GlobeGLView(props) {
                 
             </Drawer>
 
-            {
-                bool
-                ? <Globe
-                    globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-                    backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-                    lineHoverPrecision={0}
-        
-                    polygonsData={countries.features}
-                    polygonAltitude={d => d === hoverD ? 0.12 : 0.06}
-                    // polygonCapColor={d => d === hoverD ? 'green' : colorScale(getVal(d))}
-                    polygonCapColor={d => d === hoverD ? 'green' : d3.interpolateRdBu(1-d.properties.politic_polar)}
-                    polygonSideColor={() => 'rgba(0, 100, 0, 0.15)'}
-                    polygonStrokeColor={() => '#111'}
-                    polygonLabel={({ properties: d }) => `
-                        <b style="color:red">politic:${d.politic_polar.toFixed(3)}</b> <br />
-                        <b style="color:red">state:${d.name}</b> <br />
-                    `}
-                    onPolygonHover={setHoverD}
-                    polygonsTransitionDuration={300}
-                    onPolygonClick = {({ properties: d } )=> {
-                        setShowList(true)
-                        setNewsList(d.items)
-                    }}
-                    />
-                :<Globe
+            <Globe
                     globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
                     backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
                     lineHoverPrecision={0}
@@ -150,7 +125,7 @@ function GlobeGLView(props) {
                     labelColor={() => 'rgba(255, 165, 0, 0.75)'}
                     labelResolution={2}
                  />
-            }
+            
 
         </div>
     )

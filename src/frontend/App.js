@@ -8,6 +8,7 @@ import {
   Route,
 } from "react-router-dom";
 import GlobeGLView from './globegl/GlobeGLView';
+import GlobeGLEmotion from './globegl/GlobeGLEmotion';
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route path="/globegl">
             <GlobeGLView />
+          </Route>
+          <Route path="/globeglEmotion">
+            <GlobeGLEmotion />
           </Route>
           <Route path="/">
             <GlobeView />
