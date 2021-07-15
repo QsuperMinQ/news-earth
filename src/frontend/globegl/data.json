@@ -4757,9 +4757,7 @@
          "type":"Feature",
          "id":"05",
          "properties":{
-            "name":"Arkansas",
-            "lat": 38.500000,
-            "lng": -98.000000
+            "name":"Arkansas"
          },
          "geometry":{
             "type":"Polygon",
@@ -10341,9 +10339,7 @@
          "type":"Feature",
          "id":"31",
          "properties":{
-            "name":"Nebraska",
-            "lat": 41.500000,
-            "lng": -100.000000
+            "name":"Nebraska"
          },
          "geometry":{
             "type":"Polygon",
@@ -10571,9 +10567,7 @@
          "type":"Feature",
          "id":"33",
          "properties":{
-            "name":"New Hampshire",
-            "lat": 44.000000,
-            "lng": -71.500000
+            "name":"New Hampshire"
          },
          "geometry":{
             "type":"Polygon",
@@ -10923,9 +10917,7 @@
          "type":"Feature",
          "id":"36",
          "properties":{
-            "name":"New York",
-            "lat": 43.000000,
-            "lng": 75.000000
+            "name":"New York"
          },
          "geometry":{
             "type":"Polygon",
@@ -11943,9 +11935,7 @@
          "type":"Feature",
          "id":"41",
          "properties":{
-            "name":"Oregon",
-            "lat": 44.000000,
-            "lng": -120.500000
+            "name":"Oregon"
          },
          "geometry":{
             "type":"Polygon",
@@ -12329,9 +12319,7 @@
          "type":"Feature",
          "id":"44",
          "properties":{
-            "name":"Rhode Island",
-            "lat": 41.700001,
-            "lng": -71.500000
+            "name":"Rhode Island"
          },
          "geometry":{
             "type":"MultiPolygon",
@@ -12601,9 +12589,7 @@
          "type":"Feature",
          "id":"46",
          "properties":{
-            "name":"South Dakota",
-            "lat": 44.500000,
-            "lng": -100.000000
+            "name":"South Dakota"
          },
          "geometry":{
             "type":"Polygon",
@@ -12919,9 +12905,7 @@
          "type":"Feature",
          "id":"48",
          "properties":{
-            "name":"Texas",
-            "lat": 31.000000,
-            "lng": -100.000000
+            "name":"Texas"
          },
          "geometry":{
             "type":"Polygon",
@@ -13605,9 +13589,7 @@
          "type":"Feature",
          "id":"50",
          "properties":{
-            "name":"Vermont",
-            "lat": 44.000000,
-            "lng": -72.699997
+            "name":"Vermont"
          },
          "geometry":{
             "type":"Polygon",
@@ -14389,9 +14371,7 @@
          "type":"Feature",
          "id":"54",
          "properties":{
-            "name":"West Virginia",
-            "lat": 39.000000,
-            "lng": -80.500000
+            "name":"West Virginia"
          },
          "geometry":{
             "type":"Polygon",
@@ -14665,9 +14645,7 @@
          "type":"Feature",
          "id":"55",
          "properties":{
-            "name":"Wisconsin",
-            "lat": 44.500000,
-            "lng": -89.500000
+            "name":"Wisconsin"
          },
          "geometry":{
             "type":"Polygon",
